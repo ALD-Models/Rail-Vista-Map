@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UK Heritage Railways Map</title>
+    <title>Rail Vista Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         html, body, #map {
@@ -30,8 +30,10 @@
             .then(data => {
                 // Add markers for each heritage railway
                 data.forEach(railway => {
-                    L.marker(railway.location).addTo(map)
-                        .bindPopup(`<b>${railway.name}</b>`).openPopup();
+                    const location = railway.location; // Extracting location from railway object
+                    const name = railway.name; // Extracting name from railway object
+                    L.marker(location).addTo(map) // Adding marker to map
+                        .bindPopup(`<b>${name}</b>`).openPopup(); // Binding popup with name
                 });
             })
             .catch(error => {
