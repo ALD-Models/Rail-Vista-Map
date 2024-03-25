@@ -38,6 +38,8 @@
                     const name = railway.name;
                     const website = railway.website;
                     const logo = railway.logo;
+                    L.marker(location).addTo(map)
+                        .bindPopup(popupContent).openPopup();
 
                     // Create a marker with a popup containing name, website link, and logo image
                     const popupContent = `
@@ -46,8 +48,6 @@
                         <img src="${logo}" alt="${name} Logo" style="max-width: 100px;">
                     `;
 
-                    L.marker(location).addTo(map)
-                        .bindPopup(popupContent).openPopup();
                 });
             })
             .catch(error => {
