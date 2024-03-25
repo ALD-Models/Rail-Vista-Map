@@ -1,5 +1,21 @@
 [
-    { "name": "Peak Rail", "location": [53.17517901935226, -1.6048602746234912] },
-    { "name": "Ffestiniog Railway", "location": [52.9328, -3.9373] },
-    { "name": "North Yorkshire Moors Railway", "location": [54.4367, -0.7227] }
+    {
+        "name": "Peak Rail",
+        "location": [53.17517901935226, -1.6048602746234912],
+        "website": "https://www.peakrail.co.uk/",
+        "logo": "https://www.peakrail.co.uk/wp-content/uploads/2018/04/peak-rail-for-site.png"
+    },
+    {
+        "name": "Ffestiniog Railway",
+        "location": [52.9328, -3.9373],
+        "website": "https://www.festrail.co.uk/",
+        "logo": "https://www.festrail.co.uk/wp-content/uploads/2021/11/crest500w-183x300.png"
+    },
+    {
+        "name": "North Yorkshire Moors Railway",
+        "location": [54.4367, -0.7227],
+        "website": "https://www.nymr.co.uk/",
+        "logo": "https://play-lh.googleusercontent.com/NQFtotIdYhCNdvm-ijo5tDPHDC_pb8mNkICb1wkv_gdumhTHMYVJ6xKo9r-IOay5FjRA=w240-h480-rw"
+    }
+    // Add more railway entries as needed
 ]
