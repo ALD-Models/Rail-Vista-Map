@@ -54,6 +54,27 @@
             .catch(error => {
                 console.error('Error fetching railway data:', error);
             });
+
+        // Show user's location with a marker
+        map.locate({setView: true, maxZoom: 12}); // Sets the map view and maximum zoom level
+
+        // Event listener for when the user's location is found
+        function onLocationFound(e) {
+            const radius = e.accuracy / 2;
+            L.marker(e.latlng).addTo(map)
+                .bindPopup("You are here").openPopup();
+            L.circle(e.latlng, radius).addTo(map);
+        }
+        map.on('locationfound', onLocationFound);
+
+        // Restrict panning to the UK only
+        const southWest = L.latLng(49.82380908513249, -8.4375);
+        const northEast = L.latLng(60.239811169998924, 2.8125);
+        const bounds = L.latLngBounds(southWest, northEast);
+        map.setMaxBounds(bounds);
+        map.on('drag', function() {
+            map.panInsideBounds(bounds, { animate: false });
+        });
     </script>
 </body>
 </html>
