@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rail Vista Map</title>
+    <title>UK Heritage Railways Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         html, body, #map {
@@ -18,7 +18,11 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map').setView([54.3781, -2.7195], 6); // Centered on the UK
+        const map = L.map('map', {
+            center: [54.3781, -2.7195], // Centered on the UK
+            zoom: 6, // Initial zoom level
+            minZoom: 6, // Minimum zoom level to restrict zooming out
+        });
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -30,10 +34,20 @@
             .then(data => {
                 // Add markers for each heritage railway
                 data.forEach(railway => {
-                    const location = railway.location; // Extracting location from railway object
-                    const name = railway.name; // Extracting name from railway object
-                    L.marker(location).addTo(map) // Adding marker to map
-                        .bindPopup(`<b>${name}</b>`).openPopup(); // Binding popup with name
+                    const location = railway.location;
+                    const name = railway.name;
+                    const website = railway.website;
+                    const logo = railway.logo;
+
+                    // Create a marker with a popup containing name, website link, and logo image
+                    const popupContent = `
+                        <b>${name}</b><br>
+                        Website: <a href="${website}" target="_blank">${website}</a><br>
+                        <img src="${logo}" alt="${name} Logo" style="max-width: 100px;">
+                    `;
+
+                    L.marker(location).addTo(map)
+                        .bindPopup(popupContent).openPopup();
                 });
             })
             .catch(error => {
