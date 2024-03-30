@@ -31,88 +31,73 @@
 
         // Custom icon for user's location
         const userIcon = L.icon({
-            iconUrl: 'https://raw.githubusercontent.com/ALD-Models/Rail-Vista-Map/main/User%20Marker.png', // URL of your user icon image
-            iconSize: [40, 40], // Adjust the size as needed
-            iconAnchor: [15, 15],
-            popupAnchor: [0, -15]
+            iconUrl: 'https://raw.githubusercontent.com/ALD-Models/Rail-Vista-Map/main/User%20Marker.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -40]
         });
 
         // Custom circle style for accuracy indicator
         const circleStyle = {
-            color: '#161819', // Change the color of the circle as desired
-            fillColor: 'lightgray', // Change the fill color of the circle as desired
-            fillOpacity: 0.5 // Adjust the opacity of the circle as desired
+            color: '#136AEC',
+            fillColor: '#136AEC',
+            fillOpacity: 0.15,
         };
 
-        // Show user's location with a marker and custom icon
-        map.locate({
-            setView: true,
-            maxZoom: 12,
-            icon: userIcon // Use the custom icon for the user's location marker
+        let userCircle;
+
+        map.locate({setView: true, maxZoom: 16});
+
+        map.on('locationfound', function(e) {
+            const radius = e.accuracy;
+            L.marker(e.latlng, {icon: userIcon}).addTo(map)
+                .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+            userCircle = L.circle(e.latlng, radius, circleStyle).addTo(map);
         });
 
-        // Event listener for when the user's location is found
-        function onLocationFound(e) {
-            const radius = e.accuracy / 2;
-            L.marker(e.latlng, { icon: userIcon }).addTo(map) // Use the custom icon for the user's location marker
-                .bindPopup("You are here").openPopup();
-            L.circle(e.latlng, radius, circleStyle).addTo(map); // Use the custom circle style for accuracy indicator
-        }
-        map.on('locationfound', onLocationFound);
+        // Listen for zoomend event to show/hide the circle based on zoom level
+        map.on('zoomend', function() {
+            if (userCircle) {
+                if (map.getZoom() <= 6) {
+                    userCircle.remove();
+                } else {
+                    userCircle.addTo(map);
+                }
+            }
+        });
 
-// Listen for zoomend event to show/hide the circle
-map.on('zoomend', function() {
-    if (map.getZoom() <= 6 && userCircle) {
-        map.removeLayer(userCircle); // Hide the circle when zoomed out
-    } else if (map.getZoom() > 6 && !map.hasLayer(userCircle)) {
-        userCircle.addTo(map); // Show the circle when zoomed in
-    }
-});
-
-
+        // Custom icon for other markers (for completeness)
         const customIcon = L.icon({
-    iconUrl: 'https://github.com/ALD-Models/Rail-Vista-Map/raw/main/Marker.png', // URL of your icon image
-    iconSize: [40, 40],
-    iconAnchor: [15, 15],
-    popupAnchor: [0, -15]
-});
+            iconUrl: 'https://github.com/ALD-Models/Rail-Vista-Map/raw/main/Marker.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -40]
+        });
 
-
-    // Fetch railway data from GitHub
+        // Example of adding other markers - This part of the code is unchanged
         fetch('https://raw.githubusercontent.com/ALD-Models/Rail-Vista-Map/main/railways.json')
             .then(response => response.json())
             .then(data => {
-                // Add markers for each heritage railway
                 data.forEach(railway => {
                     const location = railway.location;
                     const name = railway.name;
                     const website = railway.website;
                     const logo = railway.logo;
 
-                    // Create a marker with a popup containing name, website link, and logo image
-                    const popupContent = `
-                        <b>${name}</b><br>
-                        Website: <a href="${website}" target="_blank">${website}</a><br>
-                        <img src="${logo}" alt="${name} Logo" style="max-width: 100px;">
-                    `;
+                    const popupContent = `<b>${name}</b><br>Website: <a href="${website}" target="_blank">${website}</a><br><img src="${logo}" alt="${name} Logo" style="max-width: 100px;">`;
 
-                    // Creating a marker with popup
-                    const marker = L.marker(location, { icon: customIcon }).addTo(map);
-                    marker.bindPopup(popupContent);
+                    L.marker(location, { icon: customIcon }).addTo(map).bindPopup(popupContent);
                 });
             })
-            .catch(error => {
-                console.error('Error fetching railway data:', error);
-            });
+            .catch(error => console.error('Error fetching railway data:', error));
 
         // Restrict panning to the UK only
         const southWest = L.latLng(49.82380908513249, -8.4375);
         const northEast = L.latLng(60.239811169998924, 2.8125);
         const bounds = L.latLngBounds(southWest, northEast);
         map.setMaxBounds(bounds);
-        map.on('drag', function() {
-            map.panInsideBounds(bounds, { animate: false });
-        });
+
     </script>
 </body>
 </html>
