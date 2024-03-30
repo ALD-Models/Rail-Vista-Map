@@ -30,12 +30,14 @@
         }).addTo(map);
 
         // Custom icon
-        const customIcon = L.icon({
-            iconUrl: 'icon.png', // URL of your icon image
-            iconSize: [30, 30],
-            iconAnchor: [15, 15],
-            popupAnchor: [0, -15]
-        });
+
+const customIcon = L.icon({
+    iconUrl: 'https://github.com/ALD-Models/Rail-Vista-Map/raw/main/Marker.png', // URL of your icon image
+    iconSize: [40, 40],
+    iconAnchor: [15, 15],
+    popupAnchor: [0, -15]
+});
+
 
         // Fetch railway data from GitHub
         fetch('https://raw.githubusercontent.com/ALD-Models/Rail-Vista-Map/main/railways.json')
