@@ -60,14 +60,15 @@
         }
         map.on('locationfound', onLocationFound);
 
-        // Listen for zoomend event to show/hide the circle
-        map.on('zoomend', function() {
-            if (map.getZoom() <= 6 && userCircle) {
-                map.removeLayer(userCircle); // Hide the circle when zoomed out
-            } else if (map.getZoom() > 6 && !map.hasLayer(userCircle)) {
-                userCircle.addTo(map); // Show the circle when zoomed in
-            }
-        });
+// Listen for zoomend event to show/hide the circle
+map.on('zoomend', function() {
+    if (map.getZoom() <= 6 && userCircle) {
+        map.removeLayer(userCircle); // Hide the circle when zoomed out
+    } else if (map.getZoom() > 6 && !map.hasLayer(userCircle)) {
+        userCircle.addTo(map); // Show the circle when zoomed in
+    }
+});
+
 
         const customIcon = L.icon({
     iconUrl: 'https://github.com/ALD-Models/Rail-Vista-Map/raw/main/Marker.png', // URL of your icon image
