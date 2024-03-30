@@ -29,52 +29,34 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Custom icon
+        // Custom icon for user's location
+        const userIcon = L.icon({
+            iconUrl: 'user-icon-url.png', // URL of your user icon image
+            iconSize: [30, 30], // Adjust the size as needed
+            iconAnchor: [15, 15],
+            popupAnchor: [0, -15]
+        });
 
-const customIcon = L.icon({
-    iconUrl: 'https://github.com/ALD-Models/Rail-Vista-Map/raw/main/Marker.png', // URL of your icon image
-    iconSize: [40, 40],
-    iconAnchor: [15, 15],
-    popupAnchor: [0, -15]
-});
+        // Custom circle style for accuracy indicator
+        const circleStyle = {
+            color: 'blue', // Change the color of the circle as desired
+            fillColor: 'lightblue', // Change the fill color of the circle as desired
+            fillOpacity: 0.5 // Adjust the opacity of the circle as desired
+        };
 
-
-        // Fetch railway data from GitHub
-        fetch('https://raw.githubusercontent.com/ALD-Models/Rail-Vista-Map/main/railways.json')
-            .then(response => response.json())
-            .then(data => {
-                // Add markers for each heritage railway
-                data.forEach(railway => {
-                    const location = railway.location;
-                    const name = railway.name;
-                    const website = railway.website;
-                    const logo = railway.logo;
-
-                    // Create a marker with a popup containing name, website link, and logo image
-                    const popupContent = `
-                        <b>${name}</b><br>
-                        Website: <a href="${website}" target="_blank">${website}</a><br>
-                        <img src="${logo}" alt="${name} Logo" style="max-width: 100px;">
-                    `;
-
-                    // Creating a marker with popup
-                    const marker = L.marker(location, { icon: customIcon }).addTo(map);
-                    marker.bindPopup(popupContent);
-                });
-            })
-            .catch(error => {
-                console.error('Error fetching railway data:', error);
-            });
-
-        // Show user's location with a marker
-        map.locate({setView: true, maxZoom: 12}); // Sets the map view and maximum zoom level
+        // Show user's location with a marker and custom icon
+        map.locate({
+            setView: true,
+            maxZoom: 12,
+            icon: userIcon // Use the custom icon for the user's location marker
+        });
 
         // Event listener for when the user's location is found
         function onLocationFound(e) {
             const radius = e.accuracy / 2;
-            L.marker(e.latlng).addTo(map)
+            L.marker(e.latlng, { icon: userIcon }).addTo(map) // Use the custom icon for the user's location marker
                 .bindPopup("You are here").openPopup();
-            L.circle(e.latlng, radius).addTo(map);
+            L.circle(e.latlng, radius, circleStyle).addTo(map); // Use the custom circle style for accuracy indicator
         }
         map.on('locationfound', onLocationFound);
 
