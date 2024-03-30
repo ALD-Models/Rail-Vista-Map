@@ -29,6 +29,14 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        // Custom icon
+        const customIcon = L.icon({
+            iconUrl: 'icon.png', // URL of your icon image
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+            popupAnchor: [0, -15]
+        });
+
         // Fetch railway data from GitHub
         fetch('https://raw.githubusercontent.com/ALD-Models/Rail-Vista-Map/main/railways.json')
             .then(response => response.json())
@@ -48,7 +56,7 @@
                     `;
 
                     // Creating a marker with popup
-                    const marker = L.marker(location).addTo(map);
+                    const marker = L.marker(location, { icon: customIcon }).addTo(map);
                     marker.bindPopup(popupContent);
                 });
             })
