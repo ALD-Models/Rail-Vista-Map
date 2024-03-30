@@ -29,7 +29,7 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Custom icon for user's location
+ // Custom icon for user's location
         const userIcon = L.icon({
             iconUrl: 'https://raw.githubusercontent.com/ALD-Models/Rail-Vista-Map/main/User%20Marker.png',
             iconSize: [40, 40],
@@ -38,42 +38,27 @@
         });
 
         let userCircle;
-        let userLocation;
-
         map.locate({setView: true, maxZoom: 16});
 
         map.on('locationfound', function(e) {
-            userLocation = e.latlng;
-            const radius = e.accuracy;
+            const radius = Math.round(e.accuracy / 2); // Round the accuracy to nearest meter
             L.marker(e.latlng, {icon: userIcon}).addTo(map)
                 .bindPopup("You are within " + radius + " meters from this point").openPopup();
 
-            userCircle = L.circle(e.latlng, radius, {
+            userCircle = L.circle(e.latlng, {
+                radius: radius,
                 color: '#136AEC',
                 fillColor: '#136AEC',
                 fillOpacity: 0.15,
             }).addTo(map);
         });
 
-        function updateCircleOpacity(zoomLevel) {
-            if (!userCircle) return;
-
-            let opacity;
-            if (zoomLevel <= 8) opacity = 0;
-            else if (zoomLevel <= 10) opacity = 0.05;
-            else if (zoomLevel <= 12) opacity = 0.1;
-            else if (zoomLevel <= 14) opacity = 0.15;
-            else opacity = 0.2; // Increase or adjust as desired for higher zoom levels
-
-            userCircle.setStyle({
-                fillOpacity: opacity,
-                opacity: opacity
-            });
-        }
-
-        // Listen for zoomend event to update the circle's opacity
         map.on('zoomend', function() {
-            updateCircleOpacity(map.getZoom());
+            if (map.getZoom() < 10) {
+                if (map.hasLayer(userCircle)) map.removeLayer(userCircle);
+            } else {
+                if (!map.hasLayer(userCircle) && userCircle) userCircle.addTo(map);
+            }
         });
 
         // Custom icon for other markers (for completeness)
