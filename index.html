@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0", "user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>UK Heritage Railways Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
@@ -22,6 +22,7 @@
             center: [54.3781, -2.7195], // Centered on the UK
             zoom: 6, // Initial zoom level
             minZoom: 6, // Minimum zoom level to restrict zooming out
+            maxZoom: 18, // Maximum zoom level to restrict zooming in
         });
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
