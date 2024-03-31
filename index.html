@@ -11,6 +11,21 @@
             margin: 0;
             padding: 0;
         }
+        #video-container {
+            position: relative;
+        }
+        #full-screen-button {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -80,7 +95,7 @@
 
         const demoLocation = [53.5, -2.2]; // Adjust the coordinates as needed
 
-        const demoPopupContent = `<b>Demo Train</b><br><iframe width="300" height="200" src="https://www.youtube.com/embed/Dyu7vuD8LsI?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        const demoPopupContent = `<div id="video-container"><b>Demo Train</b><br><iframe width="300" height="200" src="https://www.youtube.com/embed/Dyu7vuD8LsI?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe><button id="full-screen-button" onclick="openFullScreen()">Full Screen</button></div>`;
 
         L.marker(demoLocation, { icon: demoIcon }).addTo(map).bindPopup(demoPopupContent);
 
@@ -107,6 +122,18 @@
         const bounds = L.latLngBounds(southWest, northEast);
         map.setMaxBounds(bounds);
 
+        function openFullScreen() {
+            const iframe = document.querySelector('iframe');
+            if (iframe.requestFullscreen) {
+                iframe.requestFullscreen();
+            } else if (iframe.mozRequestFullScreen) { /* Firefox */
+                iframe.mozRequestFullScreen();
+            } else if (iframe.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                iframe.webkitRequestFullscreen();
+            } else if (iframe.msRequestFullscreen) { /* IE/Edge */
+                iframe.msRequestFullscreen();
+            }
+        }
     </script>
 </body>
 </html>
