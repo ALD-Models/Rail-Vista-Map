@@ -70,6 +70,20 @@
             popupAnchor: [0, -40]
         });
 
+        // Adding another marker for demo train
+        const demoIcon = L.icon({
+            iconUrl: 'https://github.com/ALD-Models/Rail-Vista-Map/raw/main/Live%20Marker.png',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40],
+            popupAnchor: [0, -40]
+        });
+
+        const demoLocation = [53.5, -2.2]; // Adjust the coordinates as needed
+
+        const demoPopupContent = `<b>Demo Train</b><br><iframe width="300" height="200" src="https://www.youtube.com/embed/Dyu7vuD8LsI?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+
+        L.marker(demoLocation, { icon: demoIcon }).addTo(map).bindPopup(demoPopupContent);
+
         // Example of adding other markers - This part of the code is unchanged
         fetch('https://raw.githubusercontent.com/ALD-Models/Rail-Vista-Map/main/railways.json')
             .then(response => response.json())
